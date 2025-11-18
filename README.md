@@ -1,59 +1,241 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Project BPF KLMPK4 - Sistem Manajemen UMKM
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistem manajemen untuk UMKM dengan fitur Super Admin yang dapat mengelola menu, stok, laporan penjualan, dan akun admin.
 
-## About Laravel
+## 🚀 Fitur Utama
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Super Admin Dashboard** - Panel kontrol lengkap untuk super admin
+- **Manajemen Menu** - Create, Edit, Delete menu makanan dan minuman
+- **Manajemen Stok** - Kelola stok barang dengan status real-time
+- **Laporan Penjualan** - Tracking dan analisis penjualan
+- **Manajemen Admin** - Buat, edit, dan hapus akun admin
+- **Autentikasi** - Sistem login dengan role-based access
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📋 Persyaratan Sistem
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP >= 8.2
+- Composer
+- MySQL/MariaDB (atau database lain yang didukung)
+- Node.js & NPM (untuk assets)
+- Laragon (disarankan untuk Windows)
 
-## Learning Laravel
+## 🛠️ Instalasi & Setup
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### 1. Clone atau Download Project
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```bash
+cd project_bpf_klmpk4
+```
 
-## Laravel Sponsors
+### 2. Install Dependencies
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+# Install PHP dependencies
+composer install
 
-### Premium Partners
+# Install Node dependencies
+npm install
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 3. Setup Environment
 
-## Contributing
+```bash
+# Copy file .env.example ke .env
+copy .env.example .env
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Atau di Linux/Mac:
+# cp .env.example .env
+```
 
-## Code of Conduct
+### 4. Generate Application Key
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+php artisan key:generate
+```
 
-## Security Vulnerabilities
+### 5. Konfigurasi Database
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Edit file `.env` dan sesuaikan konfigurasi database:
 
-## License
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=project_bpf_klmpk4
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+**Untuk Laragon:**
+- Buat database baru dengan nama `project_bpf_klmpk4` di phpMyAdmin
+- Atau gunakan database yang sudah ada
+
+### 6. Jalankan Migrasi & Seeder
+
+```bash
+# Jalankan migrasi
+php artisan migrate
+
+# Jalankan seeder untuk membuat super admin
+php artisan db:seed --class=AdminSeeder
+```
+
+### 7. Buat Storage Link (untuk upload gambar)
+
+```bash
+php artisan storage:link
+```
+
+### 8. Build Assets (Optional)
+
+```bash
+npm run build
+```
+
+## 🎯 Menjalankan Aplikasi
+
+### Development Mode
+
+```bash
+# Jalankan server Laravel
+php artisan serve
+
+# Di terminal terpisah, jalankan Vite untuk assets (jika diperlukan)
+npm run dev
+```
+
+Aplikasi akan berjalan di: **http://localhost:8000**
+
+### Production Mode
+
+```bash
+# Optimize aplikasi
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+# Build assets
+npm run build
+```
+
+## 🔐 Login Credentials
+
+Setelah menjalankan seeder, gunakan kredensial berikut:
+
+**Super Admin:**
+- Username: `superadmin`
+- Password: `superadmin123`
+
+**Admin (Regular):**
+- Username: `admin`
+- Password: `admin123`
+
+## 📁 Struktur Project
+
+```
+project_bpf_klmpk4/
+├── app/
+│   ├── Http/Controllers/
+│   │   ├── AdminAuthController.php
+│   │   ├── AdminMenuController.php
+│   │   ├── LaporanPenjualanController.php
+│   │   ├── StokController.php
+│   │   └── SuperAdminController.php
+│   └── Models/
+│       ├── Admin.php
+│       ├── Menu.php
+│       ├── StokMenu.php
+│       └── LaporanPenjualan.php
+├── database/
+│   ├── migrations/
+│   └── seeders/
+│       └── AdminSeeder.php
+├── resources/
+│   └── views/
+│       └── admin/
+│           ├── menu/
+│           ├── stok/
+│           ├── laporan/
+│           └── superadmin/
+└── routes/
+    └── web.php
+```
+
+## 🎨 Fitur Super Admin
+
+1. **Manajemen Menu**
+   - Tambah menu baru (makanan/minuman)
+   - Edit menu
+   - Hapus menu
+   - Upload gambar menu
+
+2. **Manajemen Stok**
+   - Tambah stok barang
+   - Update stok
+   - Lihat status stok (Tersedia/Menipis/Habis)
+   - Hapus stok
+
+3. **Laporan Penjualan**
+   - Tambah laporan penjualan
+   - Edit laporan
+   - Lihat total pesanan dan penjualan
+   - Hapus laporan
+
+4. **Manajemen Admin**
+   - Buat akun admin baru
+   - Edit akun admin
+   - Hapus akun admin
+   - Atur role (admin/super_admin)
+
+## 🔧 Troubleshooting
+
+### Error: "Class not found"
+```bash
+composer dump-autoload
+```
+
+### Error: "Storage link tidak ada"
+```bash
+php artisan storage:link
+```
+
+### Error: "Database connection failed"
+- Pastikan database sudah dibuat
+- Cek konfigurasi di file `.env`
+- Pastikan MySQL/MariaDB berjalan
+
+### Error: "Migration table not found"
+```bash
+php artisan migrate:install
+php artisan migrate
+```
+
+### Clear Cache
+```bash
+php artisan config:clear
+php artisan cache:clear
+php artisan view:clear
+php artisan route:clear
+```
+
+## 📝 Catatan Penting
+
+- Pastikan folder `storage/app/public` memiliki permission write
+- Untuk upload gambar, pastikan folder `storage/app/public/menu_images` ada
+- Semua fitur super admin hanya bisa diakses oleh user dengan role `super_admin`
+
+## 🆘 Support
+
+Jika ada masalah, pastikan:
+1. Semua dependencies sudah terinstall
+2. Database sudah dikonfigurasi dengan benar
+3. Migrasi dan seeder sudah dijalankan
+4. Storage link sudah dibuat
+
+## 📄 License
+
+MIT License
+
+---
+
+**Selamat menggunakan! 🎉**

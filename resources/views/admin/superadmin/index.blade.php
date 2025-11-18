@@ -3,9 +3,9 @@
 @section('content')
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-dark"><i class="fas fa-utensils me-2"></i>Manajemen Menu</h2>
-        <a href="{{ route('admin.menu.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus me-2"></i>Tambah Menu
+        <h2 class="fw-bold text-dark"><i class="fas fa-users-cog me-2"></i>Manajemen Admin</h2>
+        <a href="{{ route('admin.superadmin.create') }}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Tambah Admin
         </a>
     </div>
 
@@ -16,57 +16,52 @@
     </div>
     @endif
 
+    @if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    @endif
+
     <div class="card shadow-sm border-0">
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-hover align-middle">
                     <thead class="table-light">
                         <tr>
-                            <th>No</th>
-                            <th>Gambar</th>
-                            <th>Nama Menu</th>
-                            <th>Kategori</th>
-                            <th>Deskripsi</th>
-                            <th>Harga</th>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Nama Lengkap</th>
+                            <th>Role</th>
+                            <th>Dibuat</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($menus as $index => $menu)
+                        @forelse($admins as $admin)
                         <tr>
-                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $admin->admin_id }}</td>
+                            <td><strong>{{ $admin->username }}</strong></td>
+                            <td>{{ $admin->email ?? '-' }}</td>
+                            <td>{{ $admin->nama_lengkap ?? '-' }}</td>
                             <td>
-                                @if($menu->gambar_menu)
-                                <img src="{{ asset('storage/'.$menu->gambar_menu) }}" 
-                                     alt="Gambar Menu" 
-                                     class="rounded" 
-                                     style="width: 80px; height: 80px; object-fit: cover;">
+                                @if($admin->role === 'super_admin')
+                                <span class="badge bg-danger">Super Admin</span>
                                 @else
-                                <div class="bg-light rounded d-flex align-items-center justify-content-center" 
-                                     style="width: 80px; height: 80px;">
-                                    <i class="fas fa-image text-muted"></i>
-                                </div>
+                                <span class="badge bg-primary">Admin</span>
                                 @endif
                             </td>
-                            <td><strong>{{ $menu->nama_menu }}</strong></td>
-                            <td>
-                                <span class="badge bg-info">{{ ucfirst($menu->kategori) }}</span>
-                            </td>
-                            <td>
-                                <small class="text-muted">{{ Str::limit($menu->deskripsi, 50) }}</small>
-                            </td>
-                            <td>
-                                <strong class="text-success">Rp {{ number_format($menu->harga, 0, ',', '.') }}</strong>
-                            </td>
+                            <td>{{ $admin->created_at->format('d M Y') }}</td>
                             <td>
                                 <div class="btn-group" role="group">
-                                    <a href="{{ route('admin.menu.edit', $menu->menu_id) }}" 
+                                    <a href="{{ route('admin.superadmin.edit', $admin->admin_id) }}" 
                                        class="btn btn-sm btn-warning text-white">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('admin.menu.destroy', $menu->menu_id) }}" 
+                                    <form action="{{ route('admin.superadmin.destroy', $admin->admin_id) }}" 
                                           method="POST" class="d-inline"
-                                          onsubmit="return confirm('Apakah Anda yakin ingin menghapus menu ini?')">
+                                          onsubmit="return confirm('Apakah Anda yakin ingin menghapus admin ini?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger">
@@ -80,7 +75,7 @@
                         <tr>
                             <td colspan="7" class="text-center py-4 text-muted">
                                 <i class="fas fa-inbox fa-2x mb-2"></i>
-                                <p>Tidak ada data menu</p>
+                                <p>Tidak ada data admin</p>
                             </td>
                         </tr>
                         @endforelse
@@ -91,3 +86,4 @@
     </div>
 </div>
 @endsection
+

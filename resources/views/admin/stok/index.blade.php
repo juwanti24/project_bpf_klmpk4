@@ -3,9 +3,9 @@
 @section('content')
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-dark"><i class="fas fa-utensils me-2"></i>Manajemen Menu</h2>
-        <a href="{{ route('admin.menu.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus me-2"></i>Tambah Menu
+        <h2 class="fw-bold text-dark"><i class="fas fa-boxes me-2"></i>Manajemen Stok</h2>
+        <a href="{{ route('admin.stok.create') }}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Tambah Stok
         </a>
     </div>
 
@@ -22,51 +22,53 @@
                 <table class="table table-hover align-middle">
                     <thead class="table-light">
                         <tr>
-                            <th>No</th>
-                            <th>Gambar</th>
-                            <th>Nama Menu</th>
+                            <th>ID</th>
+                            <th>Menu</th>
                             <th>Kategori</th>
-                            <th>Deskripsi</th>
-                            <th>Harga</th>
+                            <th>Jumlah Stok</th>
+                            <th>Status</th>
+                            <th>Terakhir Update</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($menus as $index => $menu)
+                        @forelse($stoks as $stok)
                         <tr>
-                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $stok->stok_id }}</td>
                             <td>
-                                @if($menu->gambar_menu)
-                                <img src="{{ asset('storage/'.$menu->gambar_menu) }}" 
-                                     alt="Gambar Menu" 
-                                     class="rounded" 
-                                     style="width: 80px; height: 80px; object-fit: cover;">
+                                <strong>{{ $stok->menu->nama_menu ?? '-' }}</strong>
+                            </td>
+                            <td>
+                                @if($stok->menu)
+                                    <span class="badge bg-info">{{ ucfirst($stok->menu->kategori) }}</span>
                                 @else
-                                <div class="bg-light rounded d-flex align-items-center justify-content-center" 
-                                     style="width: 80px; height: 80px;">
-                                    <i class="fas fa-image text-muted"></i>
-                                </div>
+                                    -
                                 @endif
                             </td>
-                            <td><strong>{{ $menu->nama_menu }}</strong></td>
                             <td>
-                                <span class="badge bg-info">{{ ucfirst($menu->kategori) }}</span>
+                                <span class="badge {{ $stok->jumlah_stok > 10 ? 'bg-success' : ($stok->jumlah_stok > 0 ? 'bg-warning' : 'bg-danger') }} fs-6">
+                                    {{ $stok->jumlah_stok }}
+                                </span>
                             </td>
                             <td>
-                                <small class="text-muted">{{ Str::limit($menu->deskripsi, 50) }}</small>
+                                @if($stok->jumlah_stok > 10)
+                                    <span class="badge bg-success">Tersedia</span>
+                                @elseif($stok->jumlah_stok > 0)
+                                    <span class="badge bg-warning">Menipis</span>
+                                @else
+                                    <span class="badge bg-danger">Habis</span>
+                                @endif
                             </td>
-                            <td>
-                                <strong class="text-success">Rp {{ number_format($menu->harga, 0, ',', '.') }}</strong>
-                            </td>
+                            <td>{{ $stok->updated_at->format('d M Y H:i') }}</td>
                             <td>
                                 <div class="btn-group" role="group">
-                                    <a href="{{ route('admin.menu.edit', $menu->menu_id) }}" 
+                                    <a href="{{ route('admin.stok.edit', $stok->stok_id) }}" 
                                        class="btn btn-sm btn-warning text-white">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('admin.menu.destroy', $menu->menu_id) }}" 
+                                    <form action="{{ route('admin.stok.destroy', $stok->stok_id) }}" 
                                           method="POST" class="d-inline"
-                                          onsubmit="return confirm('Apakah Anda yakin ingin menghapus menu ini?')">
+                                          onsubmit="return confirm('Apakah Anda yakin ingin menghapus stok ini?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger">
@@ -80,7 +82,7 @@
                         <tr>
                             <td colspan="7" class="text-center py-4 text-muted">
                                 <i class="fas fa-inbox fa-2x mb-2"></i>
-                                <p>Tidak ada data menu</p>
+                                <p>Tidak ada data stok</p>
                             </td>
                         </tr>
                         @endforelse
@@ -91,3 +93,4 @@
     </div>
 </div>
 @endsection
+

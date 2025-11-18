@@ -59,7 +59,12 @@
     <div class="sidebar">
         <h3>UMKM Admin</h3>
         <a href="{{ route('admin.dashboard') }}"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+        @if(session('admin_role') === 'super_admin')
         <a href="{{ route('admin.menu.index') }}"><i class="fa-solid fa-utensils"></i> Menu</a>
+        <a href="{{ route('admin.stok.index') }}"><i class="fa-solid fa-boxes"></i> Manajemen Stok</a>
+        <a href="{{ route('admin.laporan.index') }}"><i class="fa-solid fa-chart-line"></i> Laporan Penjualan</a>
+        <a href="{{ route('admin.superadmin.index') }}"><i class="fa-solid fa-users-cog"></i> Kelola Admin</a>
+        @endif
         <a href="{{ route('admin.pesanan.index') }}"><i class="fa-solid fa-box"></i> Pesanan</a>
         <a href="{{ route('admin.logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
     </div>

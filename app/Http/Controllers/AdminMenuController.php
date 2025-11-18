@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 class AdminMenuController extends Controller
 {
+
     public function index()
     {
         $menus = Menu::all();

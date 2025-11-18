@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AdminAuthController extends Controller
 {
     public function showLogin()
     {
+        if (session('admin_logged_in')) {
+            return redirect()->route('admin.dashboard');
+        }
         return view('admin.login');
     }
 
@@ -18,13 +23,15 @@ class AdminAuthController extends Controller
             'password' => 'required',
         ]);
 
-        // Data dummy
-        $dummyUsername = 'admin';
-        $dummyPassword = 'admin123';
+        $admin = Admin::where('username', $request->username)->first();
 
-        if ($request->username === $dummyUsername && $request->password === $dummyPassword) {
-            // Simpan session sederhana
-            session(['admin_logged_in' => true]);
+        if ($admin && Hash::check($request->password, $admin->password)) {
+            session([
+                'admin_logged_in' => true,
+                'admin_id' => $admin->admin_id,
+                'admin_username' => $admin->username,
+                'admin_role' => $admin->role,
+            ]);
             return redirect()->route('admin.dashboard');
         }
 
@@ -33,7 +40,7 @@ class AdminAuthController extends Controller
 
     public function logout()
     {
-        session()->forget('admin_logged_in');
+        session()->forget(['admin_logged_in', 'admin_id', 'admin_username', 'admin_role']);
         return redirect()->route('admin.login');
     }
 }

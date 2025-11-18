@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         body { background: #f7f7f7; display: flex; justify-content: center; align-items: center; height: 100vh; }
         .login-card { padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); background: white; width: 100%; max-width: 400px; }
@@ -16,7 +17,13 @@
 
         @if($errors->any())
             <div class="alert alert-danger">
-                {{ $errors->first() }}
+                <i class="fas fa-exclamation-circle me-2"></i>{{ $errors->first() }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
             </div>
         @endif
 
