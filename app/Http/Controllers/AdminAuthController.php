@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\Admin;
 
 class AdminAuthController extends Controller
 {
@@ -18,22 +21,36 @@ class AdminAuthController extends Controller
             'password' => 'required',
         ]);
 
-        // Data dummy
-        $dummyUsername = 'admin';
-        $dummyPassword = 'admin123';
+        // Ambil admin berdasarkan username
+        $admin = Admin::where('username', $request->username)->first();
 
-        if ($request->username === $dummyUsername && $request->password === $dummyPassword) {
-            // Simpan session sederhana
-            session(['admin_logged_in' => true]);
-            return redirect()->route('admin.dashboard');
+        // Cek keberadaan admin dan password
+        if ($admin && Hash::check($request->password, $admin->password)) {
+
+            // Login Laravel
+            Auth::login($admin);
+            $request->session()->regenerate();
+
+            // Cek role dan redirect sesuai role
+            if ($admin->role === 'superadmin') {
+                return redirect()->route('superadmin.dashboard');
+            } else if ($admin->role === 'kasir') {
+                return redirect()->route('admin.dashboard');
+            }
         }
 
-        return back()->withErrors(['username' => 'Username atau password salah'])->withInput();
+        return back()
+            ->withErrors(['username' => 'Username atau password salah'])
+            ->withInput();
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        session()->forget('admin_logged_in');
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return redirect()->route('admin.login');
     }
 }
