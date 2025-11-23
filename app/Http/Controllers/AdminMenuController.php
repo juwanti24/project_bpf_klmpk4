@@ -103,29 +103,63 @@ class AdminMenuController extends Controller
     // Public-facing menu view (read-only, untuk pelanggan)
     public function publicIndex(Request $request)
 {
-    $kategori = $request->kategori;
-    $search = $request->search;
+    try {
+        $kategori = $request->kategori;
+        $search = $request->search;
 
-    $menus = Menu::when($kategori, function ($query) use ($kategori) {
-            $query->where('kategori', $kategori);
-        })
-        ->when($search, function ($query) use ($search) {
+        // Hanya tampilkan menu yang punya stok > 0
+        // Menggunakan join untuk menghindari error jika relasi tidak ada
+        $query = Menu::join('stok_menu', 'menu.menu_id', '=', 'stok_menu.menu_id')
+            ->where('stok_menu.jumlah_stok', '>', 0)
+            ->select('menu.*');
+
+        if ($kategori) {
+            $query->where('menu.kategori', $kategori);
+        }
+
+        if ($search) {
             $query->where(function ($q) use ($search) {
-                $q->where('nama_menu', 'like', "%{$search}%")
-                  ->orWhere('deskripsi', 'like', "%{$search}%");
+                $q->where('menu.nama_menu', 'like', "%{$search}%")
+                  ->orWhere('menu.deskripsi', 'like', "%{$search}%");
             });
-        })
-        ->paginate(6);
+        }
 
-    // Agar pagination tidak reset ketika filter/search aktif
-    $menus->appends([
-        'kategori' => $kategori,
-        'search' => $search,
-    ]);
+        $menus = $query->groupBy('menu.menu_id')->paginate(6);
 
-    $listKategori = Menu::select('kategori')->distinct()->get();
+        // Agar pagination tidak reset ketika filter/search aktif
+        $menus->appends([
+            'kategori' => $kategori,
+            'search' => $search,
+        ]);
 
-    return view('menu.index', compact('menus', 'listKategori', 'kategori', 'search'));
+        $listKategori = Menu::select('kategori')->distinct()->get();
+
+        return view('menu.index', compact('menus', 'listKategori', 'kategori', 'search'));
+    } catch (\Exception $e) {
+        // Jika terjadi error (misalnya tabel stok_menu belum ada), tampilkan semua menu
+        $kategori = $request->kategori;
+        $search = $request->search;
+
+        $menus = Menu::when($kategori, function ($query) use ($kategori) {
+                $query->where('kategori', $kategori);
+            })
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('nama_menu', 'like', "%{$search}%")
+                      ->orWhere('deskripsi', 'like', "%{$search}%");
+                });
+            })
+            ->paginate(6);
+
+        $menus->appends([
+            'kategori' => $kategori,
+            'search' => $search,
+        ]);
+
+        $listKategori = Menu::select('kategori')->distinct()->get();
+
+        return view('menu.index', compact('menus', 'listKategori', 'kategori', 'search'));
+    }
 }
 
 }

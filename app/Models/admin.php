@@ -9,17 +9,19 @@ class Admin extends Authenticatable
 {
     use Notifiable;
 
-    protected $table = 'admin';          // Nama tabel
-    protected $primaryKey = 'admin_id';  // Primary key custom
-    public $timestamps = true;           // Timestamps aktif
+    protected $table = 'admin';
+    protected $primaryKey = 'admin_id';
 
     protected $fillable = [
         'username',
+        'email',
+        'google_id',
         'password',
         'role',
     ];
 
     protected $hidden = [
-        'password',
+        'password'
     ];
 }
+

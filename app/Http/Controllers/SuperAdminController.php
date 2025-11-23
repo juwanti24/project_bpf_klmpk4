@@ -13,22 +13,19 @@ class SuperAdminController extends Controller
     public function index()
     {
         $admins = Admin::all();
-        return view('admin.superadmin.index', compact('admins'));
+        return view('superadmin.admins.index', compact('admins'));
     }
 
     public function create()
     {
-        return view('admin.superadmin.create');
+        return view('superadmin.admins.create');
     }
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'username' => 'required|string|max:255|unique:admin,username',
-            'email' => 'nullable|email|max:255',
-            'nama_lengkap' => 'nullable|string|max:255',
             'password' => 'required|string|min:6',
-            'role' => 'required|in:admin,super_admin',
         ]);
 
         if ($validator->fails()) {
@@ -37,19 +34,17 @@ class SuperAdminController extends Controller
 
         Admin::create([
             'username' => $request->username,
-            'email' => $request->email,
-            'nama_lengkap' => $request->nama_lengkap,
             'password' => Hash::make($request->password),
-            'role' => $request->role,
+            'role' => 'kasir',
         ]);
 
-        return redirect()->route('admin.superadmin.index')->with('success', 'Akun admin berhasil dibuat!');
+        return redirect()->route('superadmin.admins.index')->with('success', 'Akun admin berhasil dibuat!');
     }
 
     public function edit($id)
     {
         $admin = Admin::findOrFail($id);
-        return view('admin.superadmin.edit', compact('admin'));
+        return view('superadmin.admins.edit', compact('admin'));
     }
 
     public function update(Request $request, $id)
@@ -58,10 +53,7 @@ class SuperAdminController extends Controller
 
         $validator = Validator::make($request->all(), [
             'username' => 'required|string|max:255|unique:admin,username,' . $id . ',admin_id',
-            'email' => 'nullable|email|max:255',
-            'nama_lengkap' => 'nullable|string|max:255',
             'password' => 'nullable|string|min:6',
-            'role' => 'required|in:admin,super_admin',
         ]);
 
         if ($validator->fails()) {
@@ -70,9 +62,6 @@ class SuperAdminController extends Controller
 
         $data = [
             'username' => $request->username,
-            'email' => $request->email,
-            'nama_lengkap' => $request->nama_lengkap,
-            'role' => $request->role,
         ];
 
         if ($request->filled('password')) {
@@ -81,7 +70,7 @@ class SuperAdminController extends Controller
 
         $admin->update($data);
 
-        return redirect()->route('admin.superadmin.index')->with('success', 'Akun admin berhasil diupdate!');
+        return redirect()->route('superadmin.admins.index')->with('success', 'Akun admin berhasil diupdate!');
     }
 
     public function destroy($id)
@@ -95,6 +84,6 @@ class SuperAdminController extends Controller
 
         $admin->delete();
 
-        return redirect()->route('admin.superadmin.index')->with('success', 'Akun admin berhasil dihapus!');
+        return redirect()->route('superadmin.admins.index')->with('success', 'Akun admin berhasil dihapus!');
     }
 }

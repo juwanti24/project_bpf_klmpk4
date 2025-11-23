@@ -1,138 +1,123 @@
 @extends('layouts.app')
 
-@section('title', 'Menu Café')
+@section('title', 'Menu - Ruang Rasa')
 
 @push('styles')
 <style>
-    /* BACKGROUND GRADIENT */
-    .accent-bg { 
-        background: linear-gradient(180deg,#f05340,#ff7a5c); 
-        color: white; 
+    .hero-menu {
+        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1920') center/cover;
+        min-height: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: white;
+        padding: 80px 20px;
     }
-
-    /* CARD ANIMATION */
-    .menu-card{
-        transition: transform .12s, box-shadow .12s;
-        border-radius: 12px;
-        overflow: hidden;
+    
+    .hero-menu h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 20px;
     }
-    .menu-card:hover{
-        transform: translateY(-6px);
-        box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-    }
-
-    .menu-card img {
-        height: 200px;
-        object-fit: cover;
-    }
-
-    /* BUTTON STYLE */
-    .btn-success{
-        background: linear-gradient(90deg, #47c76a, #3fab54);
-        border: none;
-        transition: .2s;
-    }
-    .btn-success:hover{
-        background: linear-gradient(90deg, #3fab54, #47c76a);
-        transform: scale(1.05);
-    }
-
-    /* FILTER CARD */
-    .card.shadow-sm {
-        border-radius: 12px;
+    
+    .hero-menu p {
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto 30px;
     }
 </style>
 @endpush
 
 @section('content')
-<div class="container mt-4">
-
-    <div class="d-flex justify-content-between align-items-center">
-        <h1 class="h4 fw-bold">Menu Café</h1>
-    </div>
-
-    {{-- FILTER & SEARCH BAR --}}
-    <div class="card shadow-sm mt-3">
-        <div class="card-body">
-            <form method="GET" action="{{ route('pelanggan.menu') }}">
-                <div class="row g-3 align-items-end">
-
-                    {{-- Dropdown Kategori --}}
-                    <div class="col-md-4">
-                        <label class="form-label fw-bold">Filter Kategori</label>
-                        <select name="kategori" class="form-select" onchange="this.form.submit()">
-                            <option value="">Semua Kategori</option>
-                            
-                            @if(isset($listKategori))
-                                @foreach($listKategori as $item)
-                                    <option value="{{ $item->kategori }}" 
-                                        {{ request('kategori') == $item->kategori ? 'selected' : '' }}>
-                                        {{ ucfirst($item->kategori) }}
-                                    </option>
-                                @endforeach
-                            @endif
-                        </select>
-                    </div>
-
-                    {{-- Search Bar --}}
-                    <div class="col-md-4">
-                        <label class="form-label fw-bold">Cari Menu</label>
-                        <input type="text" name="search" class="form-control"
-                               placeholder="Cari nama menu / deskripsi..."
-                               value="{{ request('search') }}">
-                    </div>
-
-                    {{-- Search Button --}}
-                    <div class="col-md-2">
-                        <button class="btn btn-primary w-100">
-                            <i class="fa-solid fa-search"></i> Cari
-                        </button>
-                    </div>
-
-                    {{-- Reset --}}
-                    <div class="col-md-2">
-                        <a href="{{ route('pelanggan.menu') }}" class="btn btn-secondary w-100">
-                            Reset
-                        </a>
-                    </div>
-
-                </div>
-            </form>
+    {{-- Hero Section --}}
+    <div class="hero-menu">
+        <div class="container">
+            <h1>Ruang Rasa</h1>
+            <p>Selamat datang di Ruang Rasa! Nikmati berbagai pilihan makanan dan minuman berkualitas dengan cita rasa yang memukau. Setiap hidangan disajikan dengan penuh cinta dan perhatian untuk memberikan pengalaman kuliner yang tak terlupakan.</p>
+            <a href="#menu" class="btn-feane">Order Now</a>
         </div>
     </div>
 
-    {{-- CARD LIST --}}
-    <div class="row mt-4">
-        @forelse ($menus as $m)
-            <div class="col-md-4 mb-4">
-                <div class="card menu-card shadow-sm">
-                    @if($m->gambar_menu)
-                        <img src="{{ Storage::url($m->gambar_menu) }}" class="card-img-top" alt="{{ $m->nama_menu }}">
-                    @endif
-                    <div class="card-body">
-                        <h5 class="card-title">{{ $m->nama_menu }}</h5>
-                        <h6 class="text-muted">{{ ucfirst($m->kategori) }}</h6>
-                        <p class="card-text">{{ Str::limit($m->deskripsi, 100) }}</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <strong>Rp {{ number_format($m->harga, 0, ',', '.') }}</strong>
-                            <a href="{{ route('pelanggan.pesan', $m->menu_id) }}" class="btn btn-sm btn-success">
-                                Pesan Sekarang
+    {{-- Menu Section --}}
+    <div id="menu" class="container py-5">
+        <div class="section-title">
+            <h2>Our Menu</h2>
+        </div>
+
+        @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        @endif
+
+        {{-- Filter Tabs --}}
+        <div class="filter-tabs">
+            <a href="{{ route('pelanggan.menu') }}" class="filter-tab {{ !request('kategori') ? 'active' : '' }}">
+                All
+            </a>
+            @if(isset($listKategori))
+                @foreach($listKategori as $item)
+                    <a href="{{ route('pelanggan.menu', ['kategori' => $item->kategori]) }}" 
+                       class="filter-tab {{ request('kategori') == $item->kategori ? 'active' : '' }}">
+                        {{ ucfirst($item->kategori) }}
+                    </a>
+                @endforeach
+            @endif
+        </div>
+
+        {{-- Search Bar --}}
+        <div class="row mb-4">
+            <div class="col-md-8 mx-auto">
+                <form method="GET" action="{{ route('pelanggan.menu') }}">
+                    <div class="input-group">
+                        <input type="text" name="search" class="form-control form-control-lg" 
+                               placeholder="Cari menu..." value="{{ request('search') }}">
+                        <input type="hidden" name="kategori" value="{{ request('kategori') }}">
+                        <button class="btn btn-feane" type="submit">
+                            <i class="fas fa-search"></i> Cari
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {{-- Menu Cards --}}
+        <div class="row">
+            @forelse ($menus as $m)
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="menu-card-feane">
+                        @if($m->gambar_menu)
+                            <img src="{{ Storage::url($m->gambar_menu) }}" alt="{{ $m->nama_menu }}">
+                        @else
+                            <img src="https://via.placeholder.com/400x250?text=No+Image" alt="{{ $m->nama_menu }}">
+                        @endif
+                        <div class="card-body">
+                            <h5>{{ $m->nama_menu }}</h5>
+                            <div class="menu-category">{{ ucfirst($m->kategori) }}</div>
+                            <p>{{ Str::limit($m->deskripsi ?? 'Veniam debitis quaerat officiis quasi cupiditate quo, quisquam velit, magnam voluptatem repellendus sed eaque', 80) }}</p>
+                            <div class="price">Rp {{ number_format($m->harga, 0, ',', '.') }}</div>
+                            <a href="{{ route('pelanggan.pesan', $m->menu_id) }}" class="btn-feane w-100 text-center">
+                                Order Now
                             </a>
                         </div>
                     </div>
                 </div>
-            </div>
-        @empty
-            <div class="col-12">
-                <div class="alert alert-info">Belum ada menu tersedia.</div>
-            </div>
-        @endforelse
-    </div>
+            @empty
+                <div class="col-12">
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-info-circle me-2"></i>Belum ada menu tersedia.
+                    </div>
+                </div>
+            @endforelse
+        </div>
 
-    {{-- PAGINATION --}}
-    <div class="d-flex justify-content-center mt-4">
-        {{ $menus->appends(request()->query())->links('pagination::bootstrap-5') }}
+        {{-- Pagination --}}
+        @if($menus->hasPages())
+        <div class="d-flex justify-content-center mt-5">
+            {{ $menus->appends(request()->query())->links('pagination::bootstrap-5') }}
+        </div>
+        @endif
     </div>
-
-</div>
 @endsection

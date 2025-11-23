@@ -12,22 +12,31 @@ class PelangganController extends Controller
 
     public function simpanPendaftaran(Request $request)
     {
-        $request->validate([
-            'nama' => 'required|string|max:255',
-            'no_hp' => 'required|string|max:20',
-        ]);
+        try {
+            $request->validate([
+                'nama' => 'required|string|max:255',
+                'no_hp' => 'required|string|max:20',
+            ]);
 
-        Pelanggan::create([
-            'nama' => $request->nama,
-            'no_hp' => $request->no_hp,
-        ]);
+            Pelanggan::create([
+                'nama' => $request->nama,
+                'no_hp' => $request->no_hp,
+            ]);
 
-        session(['customer' => [
-            'nama' => $request->nama,
-            'no_hp' => $request->no_hp,
-        ]]);
+            // Regenerate session untuk mencegah "Page Expired"
+            $request->session()->regenerate();
 
-        return redirect()->route('pelanggan.menu')->with('success', 'Pendaftaran berhasil! Selamat datang, ' . $request->nama);
+            session(['customer' => [
+                'nama' => $request->nama,
+                'no_hp' => $request->no_hp,
+            ]]);
+
+            return redirect()->route('pelanggan.menu')->with('success', 'Pendaftaran berhasil! Selamat datang, ' . $request->nama);
+        } catch (\Exception $e) {
+            return back()->withErrors([
+                'error' => 'Terjadi kesalahan saat mendaftar: ' . $e->getMessage()
+            ])->withInput();
+        }
     }
 
     public function logout()
