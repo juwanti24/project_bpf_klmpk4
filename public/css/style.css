@@ -1,0 +1,141 @@
+/* ================================
+   THEME VARIABLES
+   (warna utama kamu)
+================================ */
+:root {
+    --theme-primary: #f05340;
+    --theme-primary-hover: #d64737;
+    --theme-secondary: #ff7a5c;
+    --theme-bg: #fff5f2;
+}
+
+/* ================================
+   BUTTONS (Bootstrap Override)
+================================ */
+.btn-primary {
+    background-color: var(--theme-primary) !important;
+    border-color: var(--theme-primary) !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--theme-primary-hover) !important;
+    border-color: var(--theme-primary-hover) !important;
+}
+
+.btn-success {
+    background-color: #2ecc71 !important;
+    border-color: #27ae60 !important;
+}
+
+.btn-warning {
+    background-color: #f1c40f !important;
+    border-color: #d4ac0d !important;
+}
+
+.btn-danger {
+    background-color: #e74c3c !important;
+    border-color: #c0392b !important;
+}
+
+/* ================================
+   LINKS & ACTIVE STATES
+================================ */
+a {
+    color: var(--theme-primary);
+}
+
+a:hover {
+    color: var(--theme-primary-hover);
+}
+
+/* ================================
+   FORM INPUTS
+================================ */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--theme-primary) !important;
+    box-shadow: 0 0 6px rgba(240, 83, 64, 0.4) !important;
+}
+
+/* ================================
+   TABLE HEADERS
+================================ */
+.table thead {
+    background: var(--theme-bg) !important;
+    color: var(--theme-primary) !important;
+    font-weight: 700;
+    border-bottom: 2px solid var(--theme-primary);
+}
+
+/* ================================
+   PAGINATION
+================================ */
+.page-item.active .page-link {
+    background-color: var(--theme-primary) !important;
+    border-color: var(--theme-primary) !important;
+}
+
+.page-link:hover {
+    background-color: var(--theme-secondary) !important;
+    color: white !important;
+}
+
+/* ================================
+   ALERT SUCCESS
+================================ */
+.alert-success {
+    border-left: 6px solid var(--theme-primary);
+    background: #ffe9e4;
+    color: #c0392b;
+}
+
+/* ================================
+   SIDEBAR FIX (dari layout kamu)
+================================ */
+.sidebar {
+    background: linear-gradient(180deg, var(--theme-primary), var(--theme-secondary));
+}
+/* ===== HEADER DASHBOARD ===== */
+.header h2 {
+    font-weight: 700;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header h2 i {
+    color: var(--theme-primary, #f05340);
+    font-size: 28px;
+}
+
+/* ===== CARD DASHBOARD ===== */
+.card {
+    border-radius: 15px !important;
+    background: white;
+    border: none;
+    transition: 0.25s;
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 5px 18px rgba(0,0,0,0.12);
+}
+
+.card h5 {
+    font-weight: 600;
+    color: #555;
+}
+
+.card p.fs-2 {
+    font-weight: 700;
+    color: var(--theme-primary, #f05340);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .header h2 {
+        font-size: 20px;
+    }
+}

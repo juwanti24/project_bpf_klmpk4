@@ -12,9 +12,9 @@ Route::get('admin/login', [AdminAuthController::class, 'showLogin'])->name('admi
 Route::post('admin/login', [AdminAuthController::class, 'login'])->name('admin.login.post');
 Route::get('admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
-// Protected (harus login)
+
 Route::prefix('admin')
-    ->middleware(CheckIsLogin::class) // <--- middleware diterapkan di sini
+    ->middleware(CheckIsLogin::class)
     ->group(function () {
 
         Route::get('dashboard', [AdminDashboardController::class, 'index'])
@@ -34,6 +34,3 @@ Route::prefix('admin')
         Route::put('menu/update/{id}', [AdminMenuController::class, 'update'])->name('admin.menu.update');
         Route::delete('menu/delete/{id}', [AdminMenuController::class, 'destroy'])->name('admin.menu.destroy');
     });
-
-// Duplicate menu route (bisa dihapus)
-Route::get('menu', [AdminMenuController::class, 'index'])->name('admin.menu.index');

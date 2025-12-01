@@ -1,18 +1,36 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Menu;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class AdminMenuController extends Controller
 {
-    public function index()
-    {
-        $menus = Menu::all();
-        return view('admin.menu.index', compact('menus'));
-    }
+
+   public function index(Request $request)
+{
+    $kategori = $request->kategori;
+    $search = $request->search;
+
+    $menus = Menu::when($kategori, function ($query) use ($kategori) {
+            $query->where('kategori', $kategori);
+        })
+        ->when($search, function ($query) use ($search) {
+            $query->where('nama_menu', 'like', "%{$search}%"); // hanya nama_menu
+        })
+        ->paginate(10);
+
+    $menus->appends([
+        'kategori' => $kategori,
+        'search' => $search
+    ]);
+
+    $listKategori = Menu::select('kategori')->distinct()->get();
+
+    return view('admin.menu.index', compact('menus', 'listKategori', 'kategori', 'search'));
+}
+
 
     public function create()
     {
@@ -22,10 +40,10 @@ class AdminMenuController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_menu' => 'required|string|max:255',
-            'kategori' => 'required|string|max:100',
-            'deskripsi' => 'nullable|string',
-            'harga' => 'required|numeric',
+            'nama_menu'   => 'required|string|max:255',
+            'kategori'    => 'required|string|max:100',
+            'deskripsi'   => 'nullable|string',
+            'harga'       => 'required|numeric',
             'gambar_menu' => 'nullable|image|max:2048',
         ]);
 
@@ -49,10 +67,10 @@ class AdminMenuController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nama_menu' => 'required|string|max:255',
-            'kategori' => 'required|string|max:100',
-            'deskripsi' => 'nullable|string',
-            'harga' => 'required|numeric',
+            'nama_menu'   => 'required|string|max:255',
+            'kategori'    => 'required|string|max:100',
+            'deskripsi'   => 'nullable|string',
+            'harga'       => 'required|numeric',
             'gambar_menu' => 'nullable|image|max:2048',
         ]);
 

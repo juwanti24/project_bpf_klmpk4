@@ -14,7 +14,6 @@ class CheckIsLogin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Jika belum login
         if (!Auth::check()) {
             return redirect()
                 ->route('admin.login')
