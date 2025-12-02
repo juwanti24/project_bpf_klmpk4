@@ -9,14 +9,14 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-   public function up()
+    public function up(): void
 {
-    Schema::create('pelanggan', function (Blueprint $table) {
-        $table->id('pelanggan_id');
-        $table->string('nama');
-        $table->string('no_hp');
-        $table->timestamps();
-    });
+    Schema::create('pelanggans', function (Blueprint $table) {
+    $table->id();
+    $table->string('nama');
+    $table->string('no_hp');
+    $table->timestamps();
+});
 }
 
 
