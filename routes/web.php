@@ -7,10 +7,14 @@ use App\Http\Controllers\AdminPesananController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\SuperAdminController;
+use App\Http\Controllers\MenuController;
+
 use Illuminate\Support\Facades\Route;
 
-// LOGIN & LOGOUT
-Route::get('/', [AdminAuthController::class, 'showLogin']);
+// Default: pelanggan daftar
+Route::get('/', function() {
+    return redirect()->route('pelanggan.daftar');
+});
 Route::get('admin/login', [AdminAuthController::class, 'showLogin'])->name('admin.login');
 Route::post('admin/login', [AdminAuthController::class, 'login'])->name('admin.login.post');
 Route::get('admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
@@ -55,6 +59,7 @@ Route::prefix('admin')->group(function () {
 Route::get('pelanggan/daftar', [PelangganController::class, 'daftar'])->name('pelanggan.daftar');
 Route::post('pelanggan/daftar', [PelangganController::class, 'simpanPendaftaran'])->name('pelanggan.simpan');
 Route::get('pelanggan/logout', [PelangganController::class, 'logout'])->name('pelanggan.logout');
+// MENU UNTUK PELANGGAN (READ + FILTER + SEARCH)
 
 // MENU UNTUK PELANGGAN (READ ONLY)
 Route::get('menu', [AdminMenuController::class, 'publicIndex'])->name('pelanggan.menu');

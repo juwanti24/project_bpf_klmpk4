@@ -77,6 +77,11 @@
             <span>{{ $pesanan->no_hp }}</span>
         </div>
 
+            <div class="receipt-item">
+                <strong>Nomor Meja:</strong>
+                <span>{{ $pesanan->meja->nomor_meja ?? '-' }}</span>
+            </div>
+
         <div class="receipt-item">
             <strong>Tanggal Pesanan:</strong>
             <span>{{ \Carbon\Carbon::parse($pesanan->tanggal_pesanan)->format('d/m/Y') }}</span>

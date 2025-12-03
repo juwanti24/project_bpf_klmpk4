@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Menu;
 use Illuminate\Http\Request;
+use App\Models\Pesanan;
 
 class AdminDashboardController extends Controller
 {
@@ -12,7 +13,7 @@ class AdminDashboardController extends Controller
     public function index()
     {
         $totalMenu    = Menu::count(); // bisa pakai 0 atau ambil dari database
-        $totalPesanan = 25;            // angka dummy
+        $totalPesanan =   Pesanan::count();         // angka dummy
 
         return view('admin.dashboard', compact('totalMenu', 'totalPesanan'));
     }

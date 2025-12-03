@@ -58,6 +58,11 @@
                     <label class="form-label"><strong>Jumlah Pesanan</strong></label>
                     <input type="number" id="jumlah" name="jumlah" class="form-control" value="1" min="1" required>
                 </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label"><strong>Nomor Meja</strong></label>
+                    <input type="text" name="nomor_meja" class="form-control" placeholder="Masukkan nomor meja" required>
             </div>
 
             <div class="mb-4 p-3 bg-light rounded">

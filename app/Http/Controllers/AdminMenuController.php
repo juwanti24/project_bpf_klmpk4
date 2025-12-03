@@ -101,9 +101,31 @@ class AdminMenuController extends Controller
     }
 
     // Public-facing menu view (read-only, untuk pelanggan)
-    public function publicIndex()
-    {
-        $menus = Menu::all();
-        return view('menu.index', compact('menus'));
-    }
+    public function publicIndex(Request $request)
+{
+    $kategori = $request->kategori;
+    $search = $request->search;
+
+    $menus = Menu::when($kategori, function ($query) use ($kategori) {
+            $query->where('kategori', $kategori);
+        })
+        ->when($search, function ($query) use ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_menu', 'like', "%{$search}%")
+                  ->orWhere('deskripsi', 'like', "%{$search}%");
+            });
+        })
+        ->paginate(6);
+
+    // Agar pagination tidak reset ketika filter/search aktif
+    $menus->appends([
+        'kategori' => $kategori,
+        'search' => $search,
+    ]);
+
+    $listKategori = Menu::select('kategori')->distinct()->get();
+
+    return view('menu.index', compact('menus', 'listKategori', 'kategori', 'search'));
+}
+
 }
