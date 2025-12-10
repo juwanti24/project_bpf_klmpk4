@@ -37,7 +37,7 @@
         <h2 class="mb-4">{{ $menu->nama_menu }}</h2>
 
         @if($menu->gambar_menu)
-            <img src="{{ asset('storage/'.$menu->gambar_menu) }}" alt="{{ $menu->nama_menu }}" class="menu-image">
+            <img src="{{ Storage::url($menu->gambar_menu) }}" alt="{{ $menu->nama_menu }}" class="menu-image">
         @endif
 
         <p class="text-muted">{{ $menu->deskripsi }}</p>
@@ -56,7 +56,10 @@
                 </div>
                 <div class="col-md-6">
                     <label class="form-label"><strong>Jumlah Pesanan</strong></label>
-                    <input type="number" id="jumlah" name="jumlah" class="form-control" value="1" min="1" required>
+                    <input type="number" id="jumlah" name="jumlah" class="form-control" value="1" min="1" max="{{ $stokMenu->jumlah_stok ?? 999 }}" required>
+                    @if(isset($stokMenu))
+                        <small class="text-muted">Stok tersedia: {{ $stokMenu->jumlah_stok }}</small>
+                    @endif
                 </div>
                 </div>
 

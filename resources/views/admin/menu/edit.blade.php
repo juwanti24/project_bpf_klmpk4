@@ -36,7 +36,7 @@
         <label>Gambar Menu</label>
         <input type="file" name="gambar_menu" class="form-control">
         @if($menu->gambar_menu)
-        <img src="{{ asset('storage/'.$menu->gambar_menu) }}" width="100" class="mt-2">
+        <img src="{{ Storage::url($menu->gambar_menu) }}" width="100" class="mt-2">
         @endif
     </div>
     <button type="submit" class="btn btn-success">Update</button>

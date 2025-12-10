@@ -47,6 +47,13 @@
 @section('content')
 <div class="container mt-4">
 
+    @if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    @endif
+
     <div class="d-flex justify-content-between align-items-center">
         <h1 class="h4 fw-bold">Menu Café</h1>
     </div>
@@ -76,7 +83,7 @@
 
                     {{-- Search Bar --}}
                     <div class="col-md-4">
-                        <label class="form-label fw-bold">Cari Menu</label>
+                        <label class="form-label fw-bold">Cari Menu2</label>
                         <input type="text" name="search" class="form-control"
                                placeholder="Cari nama menu / deskripsi..."
                                value="{{ request('search') }}">

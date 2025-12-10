@@ -31,8 +31,6 @@
                         <tr>
                             <th>ID</th>
                             <th>Username</th>
-                            <th>Email</th>
-                            <th>Nama Lengkap</th>
                             <th>Role</th>
                             <th>Dibuat</th>
                             <th>Aksi</th>
@@ -43,13 +41,11 @@
                         <tr>
                             <td>{{ $admin->admin_id }}</td>
                             <td><strong>{{ $admin->username }}</strong></td>
-                            <td>{{ $admin->email ?? '-' }}</td>
-                            <td>{{ $admin->nama_lengkap ?? '-' }}</td>
                             <td>
-                                @if($admin->role === 'super_admin')
+                                @if($admin->role === 'superadmin')
                                 <span class="badge bg-danger">Super Admin</span>
                                 @else
-                                <span class="badge bg-primary">Admin</span>
+                                <span class="badge bg-primary">Kasir</span>
                                 @endif
                             </td>
                             <td>{{ $admin->created_at->format('d M Y') }}</td>
@@ -73,7 +69,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="7" class="text-center py-4 text-muted">
+                            <td colspan="5" class="text-center py-4 text-muted">
                                 <i class="fas fa-inbox fa-2x mb-2"></i>
                                 <p>Tidak ada data admin</p>
                             </td>

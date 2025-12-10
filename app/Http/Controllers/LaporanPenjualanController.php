@@ -3,19 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Models\LaporanPenjualan;
+use App\Models\Pesanan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class LaporanPenjualanController extends Controller
 {
 
     public function index()
     {
-        $laporans = LaporanPenjualan::orderBy('bulan', 'desc')->get();
+        // Hitung laporan dari data pesanan real-time
+        // Group by bulan menggunakan DATE_FORMAT untuk MySQL atau strftime untuk SQLite
+        $laporans = Pesanan::select(
+                DB::raw('DATE_FORMAT(tanggal_pesanan, "%Y-%m") as bulan'),
+                DB::raw('COUNT(*) as total_pesanan'),
+                DB::raw('SUM(total_harga) as total_penjualan')
+            )
+            ->whereNotNull('tanggal_pesanan')
+            ->groupBy('bulan')
+            ->orderBy('bulan', 'desc')
+            ->get();
         
-        // Calculate totals
-        $totalPesanan = $laporans->sum('total_pesanan');
-        $totalPenjualan = $laporans->sum('total_penjualan');
+        // Calculate totals dari semua pesanan
+        $totalPesanan = Pesanan::count();
+        $totalPenjualan = Pesanan::sum('total_harga') ?? 0;
         
         return view('admin.laporan.index', compact('laporans', 'totalPesanan', 'totalPenjualan'));
     }

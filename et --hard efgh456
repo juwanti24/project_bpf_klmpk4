@@ -1,0 +1,10 @@
+[33mca8de5f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{0}: rebase (abort): returning to refs/heads/main
+[33mc8ec743[m[33m ([m[1;31morigin/fitur-baru[m[33m, [m[1;32mfitur-baru[m[33m)[m HEAD@{1}: commit: nambahin fitur dan nyambungin
+[33m2a7bd2b[m[33m ([m[1;32mperbarui[m[33m)[m HEAD@{2}: checkout: moving from fitur-baru to fitur-baru
+[33m2a7bd2b[m[33m ([m[1;32mperbarui[m[33m)[m HEAD@{3}: checkout: moving from perbarui to fitur-baru
+[33m2a7bd2b[m[33m ([m[1;32mperbarui[m[33m)[m HEAD@{4}: commit: kerkom tdi
+[33m5e59f59[m HEAD@{5}: checkout: moving from 5e59f59a6826ea6298fc1cd451546603a402d5bf to perbarui
+[33m5e59f59[m HEAD@{6}: commit: project terbaru hari ini
+[33m29b8246[m[33m ([m[1;31morigin/gizza_pelanggan[m[33m)[m HEAD@{7}: pull origin gizza_pelanggan --rebase (start): checkout 29b8246cdbb29675b47156d8bf107aaf8526649f
+[33mca8de5f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{8}: commit: Upload awal project ke branch gizza_pelanggan
+[33m6230fe6[m HEAD@{9}: clone: from https://github.com/juwanti24/project_bpf_klmpk4

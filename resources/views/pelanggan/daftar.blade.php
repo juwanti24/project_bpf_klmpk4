@@ -10,6 +10,12 @@
                     <div class="card-body">
                          <h4 class="card-title mb-3">Daftar Pelanggan</h4>
 
+                         @if (session('error'))
+                              <div class="alert alert-danger">
+                                   {{ session('error') }}
+                              </div>
+                         @endif
+
                          @if ($errors->any())
                               <div class="alert alert-danger">
                                    <ul class="mb-0">
@@ -37,6 +43,13 @@
                                    <a href="{{ route('pelanggan.menu') }}" class="btn btn-outline-secondary">Kembali ke Menu</a>
                                    <button type="submit" class="btn btn-primary">Daftar & Lihat Menu</button>
                               </div>
+
+                              <div class="text-center mt-3">
+    <a href="{{ route('admin.login') }}" class="btn btn-outline-dark w-100">
+        Login sebagai Admin
+    </a>
+</div>
+
                          </form>
                     </div>
                </div>

@@ -81,7 +81,7 @@
             <td>Rp {{ number_format($menu->harga,0,',','.') }}</td>
             <td>
                @if($menu->gambar_menu)
-<img src="{{ Storage::url($menu->gambar_menu) }}" width="80" alt="Gambar Menu">
+<img src="{{ asset('storage/' . $menu->gambar_menu) }}" alt="" width="120">
 @endif
 
             </td>

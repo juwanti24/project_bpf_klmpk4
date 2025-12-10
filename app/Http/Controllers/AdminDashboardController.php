@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 use App\Models\Menu;
 use Illuminate\Http\Request;
 use App\Models\Pesanan;
+use App\Models\StokMenu;
+use App\Models\Admin;
+use App\Models\Pelanggan;
 
 class AdminDashboardController extends Controller
 {
@@ -12,10 +15,27 @@ class AdminDashboardController extends Controller
      */
     public function index()
     {
-        $totalMenu    = Menu::count(); // bisa pakai 0 atau ambil dari database
-        $totalPesanan =   Pesanan::count();         // angka dummy
+        $totalMenu = Menu::count();
+        $totalPesanan = Pesanan::count();
+        $totalStok = StokMenu::sum('jumlah_stok');
+        $totalAdmin = Admin::count();
+        $totalPelanggan = Pelanggan::count();
+        $totalPenjualan = Pesanan::sum('total_harga') ?? 0;
+        
+        // Pesanan hari ini
+        $pesananHariIni = Pesanan::whereDate('tanggal_pesanan', today())->count();
+        $penjualanHariIni = Pesanan::whereDate('tanggal_pesanan', today())->sum('total_harga') ?? 0;
 
-        return view('admin.dashboard', compact('totalMenu', 'totalPesanan'));
+        return view('admin.dashboard', compact(
+            'totalMenu', 
+            'totalPesanan', 
+            'totalStok',
+            'totalAdmin',
+            'totalPelanggan',
+            'totalPenjualan',
+            'pesananHariIni',
+            'penjualanHariIni'
+        ));
     }
 
     /**
